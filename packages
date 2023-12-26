@@ -1,1 +1,4 @@
-python-nmap
+Packages You Need:
+Pip: python-nmap
+
+APT/Pacman: nmap
