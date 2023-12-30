@@ -30,6 +30,7 @@ class Nmap_os:
             print('\n[+] OS info:\n')
             print(dump['scan'][str(self.ip_address)]['osmatch'][0]['osclass'])
             return str(dump['scan'][str(self.ip_address)]['osmatch'][0]['osclass'][0]['osfamily'])
+
         except:
             print("[-] Could not scan OS, are you root?")
 
@@ -41,6 +42,7 @@ class TTL:
     def __init__(self,ip_address):
         self.ip_address = ip_address
         self.os_name = self.get_ttl()
+
     def get_ttl(self):
         try:
             proc = subprocess.Popen(["/bin/ping -c 1 %s" % self.ip_address, ""], stdout=subprocess.PIPE, shell=True)
@@ -62,31 +64,31 @@ class TTL:
         except:
            print("\n[-] Error while sending ping command, Target could be blocking ICMP traces \n- Please try Again -\n")
 
-class Init:
+
+def Init():
     try:
         ip = input("\n[+] Target IP: ")
         ip_address = ipaddress.ip_address(ip)
         while True:
-            x = input("\n[1] Nmap OS discovery (Requires Root Privileges)\n[2] TTL OS discovery\n\n[+] Choose option: ")
+            x = input("\n[1] Nmap OS discovery (Requires Root Privileges)\n[2] TTL OS discovery\n\n[>] Choose option: ")
             if str(x) != '1' and str(x) != '2':
                 print("\n[-] Invalid Option")
             else:
                 break
         if str(x) == '1':
             target = Nmap_os(ip_address)
-            os_name = target.os_name
         elif str(x) == '2':
-            #Second Option  
             target = TTL(ip_address)
 
         # Display OS:
         print('\n[+] OS = ' + target.os_name)
+        return target.os_name
 
     except ValueError:
         print('[-] Invalid address: %s' % sys.argv[1])
         sys.exit(1)
     except:
-        print("\n[-] Exiting Program")
+            print("\n[-] Exiting Program")
 
 
     
