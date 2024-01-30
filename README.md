@@ -11,7 +11,7 @@ pip install -r requirements.txt
 sudo apt install python-halberd
 ```
 
-### Arch:
+### Black Arch:
 
 ```
 git clone https://github.com/KrakenEU/PenKraken
