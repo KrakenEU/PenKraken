@@ -1,6 +1,6 @@
 # PenKraken
 
-## Instalation
+## Installation
 
 ### Debian:
 
