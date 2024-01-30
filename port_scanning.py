@@ -165,6 +165,6 @@ def Init():
         sys.exit(1)
 
     except:
-            print(f"{penkraken.colors['red']}\n[-] Exiting Program{penkraken.colors['reset']}")
+            print(f"{penkraken.colors['red']}\n[-] Exiting Port Scan{penkraken.colors['reset']}")
 
  

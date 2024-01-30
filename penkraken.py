@@ -5,9 +5,13 @@ import subprocess
 import ipaddress
 import nmap
 import signal
+import wafw00f
+
+# Import modules
 import os_identification as os_identify
 import port_scanning as port_scanning
 import waf_detection as waf_detection
+import load_balancers as load_balancers
 
 colors = {
   'reset': '\x1b[0m',
@@ -71,9 +75,10 @@ class Menu:
         self.os = ''
         self.ports = ''
         self.wafs = ''
+        self.balancers = ''
         try:
             print(f"{colors['blue']}\n[+] What would you like to use:{colors['reset']}")
-            option = input(f"{colors['bright_green']}\n[1] OS Identification\n[2] Port Scanning\n[3] WAF Detection\n\n{colors['blue']}[>] Choose an option: {colors['reset']}")
+            option = input(f"{colors['bright_green']}\n[1] OS Identification\n[2] Port Scanning\n[3] WAF Detectionn\n[4] Load Balancers Scan\n\n{colors['blue']}[>] Choose an option: {colors['reset']}")
 
             # Os Identification
             if option == '1':
@@ -110,7 +115,19 @@ class Menu:
                         print(f"{colors['red']}\n[+] Exiting WAF Detection...{colors['reset']}") 
                 else:
                     self.waf_scan()
-    
+
+            # Load Balancers
+            elif option == '4':
+                if balancers != '':
+                    print(f"{colors['red']}\n[+] Last Halberd scan output was:\n{str(balancers)}{colors['reset']}")
+                    again = input(f"{colors['blue']}\n[>] Would you like to scan for Load Balancers again? (y/n): {colors['reset']}")
+                    if 'y' in str(again).lower():
+                        self.halberd_scan()
+                    else:
+                        print(f"{colors['red']}\n[+] Exiting Halberd Module...{colors['reset']}") 
+                else:
+                    self.halberd_scan()
+
         except:
             print("Invalid option")
 # Calling Independent Modules
@@ -122,6 +139,9 @@ class Menu:
     
     def waf_scan(self):
         self.wafs = waf_detection.Init()
+    
+    def halberd_scan(self):
+        self.balancers = load_balancers.Init()
 
 
 if __name__ == "__main__":
@@ -143,6 +163,7 @@ ______   ____   ____ |    |/ _|___________  |  | __ ____   ____
     os_name = ''
     ports_discovered = ''
     wafs = ''
+    balancers = ''
 
     # Choose an Option:
     while True:
@@ -156,6 +177,8 @@ ______   ____   ____ |    |/ _|___________  |  | __ ____   ____
                 ports_discovered = penkraken_menu.ports
             if penkraken_menu.wafs != '':
                 wafs = penkraken_menu.wafs
+            if penkraken_menu.balancers != '':
+                balancers = penkraken_menu.balancers
         
         except:
             pass

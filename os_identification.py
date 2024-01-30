@@ -89,7 +89,7 @@ def Init():
         print(f"{penkraken.colors['red']}[-] Invalid address: %s{penkraken.colors['reset']}")
         sys.exit(1)
     except:
-           print(f"{penkraken.colors['red']}\n[-] Exiting Program{penkraken.colors['reset']}")
+           print(f"{penkraken.colors['red']}\n[-] Exiting OS Scan{penkraken.colors['reset']}")
 
 
     
