@@ -24,3 +24,11 @@ source virtual_kraken/bin/activate
 python -m pip install -r requirements.txt
 sudo pacman -S halberd
 ```
+
+## Usage
+
+```
+./penkraken.py
+In some modules you may be asked to run again the program with sudo
+```
+
