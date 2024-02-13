@@ -12,6 +12,7 @@ import os_identification as os_identify
 import port_scanning as port_scanning
 import waf_detection as waf_detection
 import load_balancers as load_balancers
+import discovery_tools as discoverytools
 
 colors = {
   'reset': '\x1b[0m',
@@ -76,60 +77,75 @@ class Menu:
         self.ports = ''
         self.wafs = ''
         self.balancers = ''
-        try:
-            print(f"{colors['blue']}\n[+] What would you like to use:{colors['reset']}")
-            option = input(f"{colors['bright_green']}\n[1] OS Identification\n[2] Port Scanning\n[3] WAF Detectionn\n[4] Load Balancers Scan\n\n{colors['blue']}[>] Choose an option: {colors['reset']}")
+        self.discovery = ''
 
-            # Os Identification
-            if option == '1':
-                if os_name != '':
-                    print(f"{colors['red']}\n[+] Last OS Identified was: {os_name}{colors['reset']}")
-                    again = input(f"{colors['blue']}[>] Would you like to identify the OS again? (y/n): {colors['reset']}")
-                    if 'y' in str(again).lower():
-                        self.os_identification()
-                    else:
-                        print(f"{colors['bright_red']}\n[+] Exiting OS Identification...{colors['reset']}") 
-                else:
+        #try:
+        print(f"{colors['blue']}\n[+] What would you like to use:{colors['reset']}")
+        option = input(f"{colors['bright_green']}\n[1] OS Identification\n[2] Port Scanning\n[3] WAF Detectionn\n[4] Load Balancers Scan\n[5] Project Discovery Tools\n\n{colors['blue']}[>] Choose an option: {colors['reset']}")
+
+        # Os Identification
+        if option == '1':
+            if os_name != '':
+                print(f"{colors['red']}\n[+] Last OS Identified was: {os_name}{colors['reset']}")
+                again = input(f"{colors['blue']}[>] Would you like to identify the OS again? (y/n): {colors['reset']}")
+                if 'y' in str(again).lower():
                     self.os_identification()
-
-            # Port Scanning
-            elif option == '2':
-                if ports_discovered != '':
-                    print(f"{colors['red']}\n[+] Last scanned ports were: {ports_discovered} {colors['reset']}")
-                    again = input(f"{colors['blue']}\n[>] Would you like to scan ports again? (y/n): {colors['reset']}")
-                    if 'y' in str(again).lower():
-                        self.ports_scan()
-                    else:
-                        print(f"{colors['red']}\n[+] Exiting Port Scanning...{colors['reset']}") 
                 else:
+                    print(f"{colors['bright_red']}\n[+] Exiting OS Identification...{colors['reset']}") 
+            else:
+                self.os_identification()
+
+        # Port Scanning
+        elif option == '2':
+            if ports_discovered != '':
+                print(f"{colors['red']}\n[+] Last scanned ports were: {ports_discovered} {colors['reset']}")
+                again = input(f"{colors['blue']}\n[>] Would you like to scan ports again? (y/n): {colors['reset']}")
+                if 'y' in str(again).lower():
                     self.ports_scan()
-            
-            # WAF Detection
-            elif option == '3':
-                if wafs != '':
-                    print(f"{colors['red']}\n[+] Last WAF scan output was:\n{str(wafs)}{colors['reset']}")
-                    again = input(f"{colors['blue']}\n[>] Would you like to scan for exiting WAFs again? (y/n): {colors['reset']}")
-                    if 'y' in str(again).lower():
-                        self.waf_scan()
-                    else:
-                        print(f"{colors['red']}\n[+] Exiting WAF Detection...{colors['reset']}") 
                 else:
+                    print(f"{colors['red']}\n[+] Exiting Port Scanning...{colors['reset']}") 
+            else:
+                self.ports_scan()
+        
+        # WAF Detection
+        elif option == '3':
+            if wafs != '':
+                print(f"{colors['red']}\n[+] Last WAF scan output was:\n{str(wafs)}{colors['reset']}")
+                again = input(f"{colors['blue']}\n[>] Would you like to scan for exiting WAFs again? (y/n): {colors['reset']}")
+                if 'y' in str(again).lower():
                     self.waf_scan()
-
-            # Load Balancers
-            elif option == '4':
-                if balancers != '':
-                    print(f"{colors['red']}\n[+] Last Halberd scan output was:\n{str(balancers)}{colors['reset']}")
-                    again = input(f"{colors['blue']}\n[>] Would you like to scan for Load Balancers again? (y/n): {colors['reset']}")
-                    if 'y' in str(again).lower():
-                        self.halberd_scan()
-                    else:
-                        print(f"{colors['red']}\n[+] Exiting Halberd Module...{colors['reset']}") 
                 else:
-                    self.halberd_scan()
+                    print(f"{colors['red']}\n[+] Exiting WAF Detection...{colors['reset']}") 
+            else:
+                self.waf_scan()
 
-        except:
-            print("Invalid option")
+        # Load Balancers
+        elif option == '4':
+            if balancers != '':
+                print(f"{colors['red']}\n[+] Last Halberd scan output was:\n{str(balancers)}{colors['reset']}")
+                again = input(f"{colors['blue']}\n[>] Would you like to scan for Load Balancers again? (y/n): {colors['reset']}")
+                if 'y' in str(again).lower():
+                    self.halberd_scan()
+                else:
+                    print(f"{colors['red']}\n[+] Exiting Halberd Module...{colors['reset']}") 
+            else:
+                self.halberd_scan()
+        
+        # Project Discovery
+        elif option == '5':
+            if balancers != '':
+                print(f"{colors['red']}\n[+] Last ProjectDiscovery scan output was:\n{str(balancers)}{colors['reset']}")
+                again = input(f"{colors['blue']}\n[>] Would you like to run scans again? (y/n): {colors['reset']}")
+                if 'y' in str(again).lower():
+                    self.PDiscovery_scan()
+                else:
+                    print(f"{colors['red']}\n[+] Exiting ProjectDiscovery Module...{colors['reset']}") 
+            else:
+                self.PDiscovery_scan()
+
+        #except:
+            #print("Invalid option")
+
 # Calling Independent Modules
     def os_identification(self):  
         self.os = os_identify.Init()
@@ -143,6 +159,8 @@ class Menu:
     def halberd_scan(self):
         self.balancers = load_balancers.Init()
 
+    def PDiscovery_scan(self):
+        self.discovery = discoverytools.Init()
 
 if __name__ == "__main__":
     penkraken_welcome = Welcome(f"""
@@ -164,6 +182,7 @@ ______   ____   ____ |    |/ _|___________  |  | __ ____   ____
     ports_discovered = ''
     wafs = ''
     balancers = ''
+    discoery = ''
 
     # Choose an Option:
     while True:
@@ -179,13 +198,16 @@ ______   ____   ____ |    |/ _|___________  |  | __ ____   ____
                 wafs = penkraken_menu.wafs
             if penkraken_menu.balancers != '':
                 balancers = penkraken_menu.balancers
+            if penkraken_menu.discovery != '':
+                discovery = penkraken_menu.discovery
         
         except:
             pass
 
         # Perform more actions
-        cont = input(f"{colors['blue']}\n[>] Would you like to perform more actions? (y/n): {colors['reset']}")
+        
         while True:
+            cont = input(f"{colors['blue']}\n[>] Would you like to perform more actions? (y/n): {colors['reset']}")
             if 'y' in str(cont).lower():
                 break
             elif 'n' in str(cont).lower():

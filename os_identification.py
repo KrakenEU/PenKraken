@@ -67,32 +67,33 @@ class TTL:
 
 
 def Init():
-    try:
-        print(f"{penkraken.colors['blue']}\n[+] Welcome to {penkraken.colors['red']}OsIdentification{penkraken.colors['blue']} module!\n{penkraken.colors['reset']}")
-        ip = input(f"{penkraken.colors['blue']}\n[+] Target IP: {penkraken.colors['reset']}")
-        ip_address = ipaddress.ip_address(ip)
-        while True:
-            x = input(f"{penkraken.colors['green']}\n[1] Nmap OS discovery (Requires Root Privileges)\n[2] TTL OS discovery\n\n{penkraken.colors['blue']}[>] Choose option: {penkraken.colors['reset']}")
-            if str(x) != '1' and str(x) != '2':
-                print(f"{penkraken.colors['red']}\n[-] Invalid Option{penkraken.colors['reset']}")
-            else:
-                break
-        if str(x) == '1':
-            target = Nmap_os(ip_address)
-        elif str(x) == '2':
-            target = TTL(ip_address)
+    #try:
+    print(f"{penkraken.colors['blue']}\n[+] Welcome to {penkraken.colors['red']}OsIdentification{penkraken.colors['blue']} module!\n{penkraken.colors['reset']}")
+    ip = input(f"{penkraken.colors['blue']}\n[+] Target IP: {penkraken.colors['reset']}")
+    ip_address = ipaddress.ip_address(ip)
+    while True:
+        x = input(f"{penkraken.colors['green']}\n[1] Nmap OS discovery (Requires Root Privileges)\n[2] TTL OS discovery\n\n{penkraken.colors['blue']}[>] Choose option: {penkraken.colors['reset']}")
+        if str(x) != '1' and str(x) != '2':
+            print(f"{penkraken.colors['red']}\n[-] Invalid Option{penkraken.colors['reset']}")
+        else:
+            break
+    if str(x) == '1':
+        target = Nmap_os(ip_address)
+    elif str(x) == '2':
+        target = TTL(ip_address)
 
-        # Display OS:
-        print(f"{penkraken.colors['magenta']}\n[+] OS = {penkraken.colors['red']}{target.os_name}{penkraken.colors['reset']}")
-        return target.os_name
-
+    # Display OS:
+    print(f"{penkraken.colors['magenta']}\n[+] OS = {penkraken.colors['red']}{target.os_name}{penkraken.colors['reset']}")
+    return target.os_name
+'''
     except ValueError:
         print(f"{penkraken.colors['red']}[-] Invalid address: %s{penkraken.colors['reset']}")
         sys.exit(1)
+
     except:
-           print(f"{penkraken.colors['red']}\n[-] Exiting OS Scan{penkraken.colors['reset']}")
+        print(f"{penkraken.colors['red']}\n[-] Exiting OS Scan{penkraken.colors['reset']}")
 
-
+'''
     
 
     
