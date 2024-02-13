@@ -145,6 +145,7 @@ class nmapPorts:
 
 def Init():
     try:
+        print(f"{penkraken.colors['blue']}\n[+] Welcome to {penkraken.colors['red']}PortScanning{penkraken.colors['blue']} module!\n{penkraken.colors['reset']}")
         while True:
             x = input(f"{penkraken.colors['green']}\n[1] OpenPorts Discovery Script\n[2] Nmap Full Ports & Services Scan\n\n{penkraken.colors['blue']}[>] Choose option: {penkraken.colors['reset']}")
             if str(x) != '1' and str(x) != '2':

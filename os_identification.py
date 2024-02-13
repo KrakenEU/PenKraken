@@ -68,6 +68,7 @@ class TTL:
 
 def Init():
     try:
+        print(f"{penkraken.colors['blue']}\n[+] Welcome to {penkraken.colors['red']}OsIdentification{penkraken.colors['blue']} module!\n{penkraken.colors['reset']}")
         ip = input(f"{penkraken.colors['blue']}\n[+] Target IP: {penkraken.colors['reset']}")
         ip_address = ipaddress.ip_address(ip)
         while True:
