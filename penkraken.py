@@ -13,7 +13,7 @@ import port_scanning as port_scanning
 import waf_detection as waf_detection
 import load_balancers as load_balancers
 import discovery_tools as discoverytools
-
+import Fuzzing as fuzzing
 colors = {
   'reset': '\x1b[0m',
   'bold': '\x1b[1m',
@@ -78,10 +78,11 @@ class Menu:
         self.wafs = ''
         self.balancers = ''
         self.discovery = ''
+        self.fuzzer = ''
 
         try:
             print(f"{colors['blue']}\n[+] What would you like to use:{colors['reset']}")
-            option = input(f"{colors['bright_green']}\n[1] OS Identification\n[2] Port Scanning\n[3] WAF Detectionn\n[4] Load Balancers Scan\n[5] Project Discovery Tools\n\n{colors['blue']}[>] Choose an option: {colors['reset']}")
+            option = input(f"{colors['bright_green']}\n[1] OS Identification\n[2] Port Scanning\n[3] WAF Detectionn\n[4] Load Balancers Scan\n[5] Project Discovery Tools\n[6] Fuzzing Module\n\n{colors['blue']}[>] Choose an option: {colors['reset']}")
 
             # Os Identification
             if option == '1':
@@ -133,8 +134,8 @@ class Menu:
             
             # Project Discovery
             elif option == '5':
-                if balancers != '':
-                    print(f"{colors['red']}\n[+] Last ProjectDiscovery scan output was:\n{str(balancers)}{colors['reset']}")
+                if discovery != '':
+                    print(f"{colors['red']}\n[+] Last ProjectDiscovery scan output was:\n{str(discovery)}{colors['reset']}")
                     again = input(f"{colors['blue']}\n[>] Would you like to run scans again? (y/n): {colors['reset']}")
                     if 'y' in str(again).lower():
                         self.PDiscovery_scan()
@@ -142,6 +143,18 @@ class Menu:
                         print(f"{colors['red']}\n[+] Exiting ProjectDiscovery Module...{colors['reset']}") 
                 else:
                     self.PDiscovery_scan()
+            
+            # Fuzzing module
+            elif option == '6':
+                if fuzzer != '':
+                    print(f"{colors['red']}\n[+] Last FUZZING scan output was:\n{str(fuzzer)}{colors['reset']}")
+                    again = input(f"{colors['blue']}\n[>] Would you like to FUZZ again? (y/n): {colors['reset']}")
+                    if 'y' in str(again).lower():
+                        self.fuzzing_scan()
+                    else:
+                        print(f"{colors['red']}\n[+] Exiting FUZZING Module...{colors['reset']}") 
+                else:
+                    self.fuzzing_scan()
 
         except:
             print("Invalid option")
@@ -161,6 +174,9 @@ class Menu:
 
     def PDiscovery_scan(self):
         self.discovery = discoverytools.Init()
+    
+    def fuzzing_scan(self):
+        self.fuzzer = fuzzing.Init()
 
 if __name__ == "__main__":
     penkraken_welcome = Welcome(f"""
@@ -182,8 +198,8 @@ ______   ____   ____ |    |/ _|___________  |  | __ ____   ____
     ports_discovered = ''
     wafs = ''
     balancers = ''
-    discoery = ''
-
+    discovery = ''
+    fuzzer = ''
     # Choose an Option:
     while True:
         penkraken_menu = Menu()
@@ -200,6 +216,9 @@ ______   ____   ____ |    |/ _|___________  |  | __ ____   ____
                 balancers = penkraken_menu.balancers
             if penkraken_menu.discovery != '':
                 discovery = penkraken_menu.discovery
+            if penkraken_menu.fuzzer != '':
+                fuzzer = penkraken_menu.fuzzer
+
         
         except:
             pass
