@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-import re
-import sys
 import subprocess
 import penkraken
 
@@ -194,11 +192,15 @@ class nuclei:
                             
                 # run command
                 print(f"{penkraken.colors['blue']}\n[+] Starting Nuclei scan against {penkraken.colors['magenta']}{targ} {penkraken.colors['blue']}with templates in {penkraken.colors['magenta']}{temp}/ {penkraken.colors['reset']}")
-                output = subprocess.check_output(f"nuclei -u {targ} -t {temp}/", shell=True)
-                # print and save results
-                for x in str(output.decode()).split('\n'):
-                    print(f"{penkraken.colors['magenta']} {x} {penkraken.colors['reset']}")
-                    self.results.append(x) 
+                command = f"nuclei -u {targ} -t {temp}/"
+                process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,text=True, shell=True)
+                while True:
+                    salida = process.stdout.readline()
+                    if salida == '' and process.poll() is not None:
+                        break
+                    if salida:
+                        print(salida.strip())
+                        self.results.append(salida.strip())
             else:
                 # take filename
                 check = 0
@@ -226,11 +228,15 @@ class nuclei:
                             break 
                 # run command
                 print(f"{penkraken.colors['blue']}\n[+] Starting Nuclei scan against {penkraken.colors['magenta']}{f} {penkraken.colors['blue']}with templates in {penkraken.colors['magenta']}{temp}/ {penkraken.colors['reset']}")
-                output = subprocess.check_output(f"nuclei -list {f} -t {temp}/", shell=True)
-                # print and save results
-                for x in str(output.decode()).split('\n'):
-                    print(f"{penkraken.colors['magenta']} {x} {penkraken.colors['reset']}")
-                    self.results.append(x)  
+                command = f"nuclei -list {f} -t {temp}/"
+                process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,text=True, shell=True)
+                while True:
+                    salida = process.stdout.readline()
+                    if salida == '' and process.poll() is not None:
+                        break
+                    if salida:
+                        print(salida.strip())
+                        self.results.append(salida.strip())
 
         except:
             print(f"{penkraken.colors['red']} Error encountered in Subfinder Scan {penkraken.colors['reset']}")
@@ -251,14 +257,16 @@ class nuclei:
                         print(f"{penkraken.colors['red']}\n[-] Invalid Target{penkraken.colors['reset']}")
                         check = 0
                         break
-
-            # run command
-            print(f"{penkraken.colors['blue']}\n[+] Starting Nuclei scan against {penkraken.colors['magenta']}{t} {penkraken.colors['reset']}")
-            output = subprocess.check_output(f"nuclei -u {t}", shell=True)
-            # print and save results
-            for x in str(output.decode()).split('\n'):
-                print(f"{penkraken.colors['magenta']} {x} {penkraken.colors['reset']}")
-                self.results.append(x)
+            command = f"nuclei -u {t}"
+            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,text=True, shell=True)
+            while True:
+                salida = process.stdout.readline()
+                if salida == '' and process.poll() is not None:
+                    break
+                if salida:
+                    print(salida.strip())
+                    self.results.append(salida.strip())
+            
 
         except:
             print(f"{penkraken.colors['red']} Error encountered in Nuclei Scan {penkraken.colors['reset']}")
@@ -297,16 +305,21 @@ class autoscan:
             # run command
             print(f"{penkraken.colors['blue']}\n[+] Triggering auto scan against {penkraken.colors['magenta']}{t}{penkraken.colors['reset']}")
             output = subprocess.check_output(f"subfinder -d {t} -o {t}-urls.txt | httpx -status-code -title -tech-detect", shell=True)
-            print(f"{penkraken.colors['blue']}\n[+] Results were saved into {penkraken.colors['magenta']}{t}-urls.txt{penkraken.colors['blue']}, consider running nuclei on some of them{penkraken.colors['reset']}")
+            print(f"{penkraken.colors['blue']}\n[+] Results were saved into {penkraken.colors['magenta']}{t}-urls.txt{penkraken.colors['blue']}{penkraken.colors['reset']}")
             for x in str(output.decode()).split('\n'):
                 print(f"{penkraken.colors['magenta']} {x} {penkraken.colors['reset']}")
                 self.results.append(x)
-            print(f"{penkraken.colors['blue']}\n[+] Running nuclei http scan on {penkraken.colors['magenta']}{t}{penkraken.colors['blue']} (This could take time...){penkraken.colors['reset']}")
-            nc_output = subprocess.check_output(f"nuclei -u {t} -t http/ cves/", shell=True)
+            print(f"{penkraken.colors['blue']}\n[+] Running nuclei http scan on {penkraken.colors['magenta']}{t}-urls.txt{penkraken.colors['blue']} (This could take A LOT of time...){penkraken.colors['reset']}")
             # print and save results
-            for x in str(nc_output.decode()).split('\n'):
-                print(f"{penkraken.colors['magenta']} {x} {penkraken.colors['reset']}")
-                self.results.append(x)
+            command = f"nuclei -list {t}-urls.txt"
+            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,text=True, shell=True)
+            while True:
+                salida = process.stdout.readline()
+                if salida == '' and process.poll() is not None:
+                    break
+                if salida:
+                    print(salida.strip())
+                    self.results.append(salida.strip())
 
         except:
             print(f"{penkraken.colors['red']} Error encountered in AutoScan {penkraken.colors['reset']}")
