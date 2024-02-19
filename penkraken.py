@@ -14,6 +14,8 @@ import waf_detection as waf_detection
 import load_balancers as load_balancers
 import discovery_tools as discoverytools
 import Fuzzing as fuzzing
+import exploit_searcher as exp_searcher
+
 colors = {
   'reset': '\x1b[0m',
   'bold': '\x1b[1m',
@@ -79,15 +81,16 @@ class Menu:
         self.balancers = ''
         self.discovery = ''
         self.fuzzer = ''
+        self.exploits = ''
 
         try:
             print(f"{colors['blue']}\n[+] What would you like to use:{colors['reset']}")
-            option = input(f"{colors['bright_green']}\n[1] OS Identification\n[2] Port Scanning\n[3] WAF Detectionn\n[4] Load Balancers Scan\n[5] Project Discovery Tools\n[6] Fuzzing Module\n\n{colors['blue']}[>] Choose an option: {colors['reset']}")
+            option = input(f"{colors['bright_green']}\n[1] OS Identification\n[2] Port Scanning\n[3] WAF Detectionn\n[4] Load Balancers Scan\n[5] Project Discovery Tools\n[6] Fuzzing Module\n[7] Exploit Searcher\n\n{colors['blue']}[>] Choose an option: {colors['reset']}")
 
             # Os Identification
             if option == '1':
                 if os_name != '':
-                    print(f"{colors['red']}\n[+] Last OS Identified was: {os_name}{colors['reset']}")
+                    print(f"{colors['red']}\n[+] Last OS Identified was: {os_name}")
                     again = input(f"{colors['blue']}[>] Would you like to identify the OS again? (y/n): {colors['reset']}")
                     if 'y' in str(again).lower():
                         self.os_identification()
@@ -99,7 +102,7 @@ class Menu:
             # Port Scanning
             elif option == '2':
                 if ports_discovered != '':
-                    print(f"{colors['red']}\n[+] Last scanned ports were: {ports_discovered} {colors['reset']}")
+                    print(f"{colors['red']}\n[+] Last scanned ports were: {ports_discovered}")
                     again = input(f"{colors['blue']}\n[>] Would you like to scan ports again? (y/n): {colors['reset']}")
                     if 'y' in str(again).lower():
                         self.ports_scan()
@@ -111,7 +114,7 @@ class Menu:
             # WAF Detection
             elif option == '3':
                 if wafs != '':
-                    print(f"{colors['red']}\n[+] Last WAF scan output was:\n{str(wafs)}{colors['reset']}")
+                    print(f"{colors['red']}\n[+] Last WAF scan output was:\n{str(wafs)}")
                     again = input(f"{colors['blue']}\n[>] Would you like to scan for exiting WAFs again? (y/n): {colors['reset']}")
                     if 'y' in str(again).lower():
                         self.waf_scan()
@@ -123,7 +126,7 @@ class Menu:
             # Load Balancers
             elif option == '4':
                 if balancers != '':
-                    print(f"{colors['red']}\n[+] Last Halberd scan output was:\n{str(balancers)}{colors['reset']}")
+                    print(f"{colors['red']}\n[+] Last Halberd scan output was:\n{str(balancers)}")
                     again = input(f"{colors['blue']}\n[>] Would you like to scan for Load Balancers again? (y/n): {colors['reset']}")
                     if 'y' in str(again).lower():
                         self.halberd_scan()
@@ -135,7 +138,7 @@ class Menu:
             # Project Discovery
             elif option == '5':
                 if discovery != '':
-                    print(f"{colors['red']}\n[+] Last ProjectDiscovery scan output was:\n{str(discovery)}{colors['reset']}")
+                    print(f"{colors['red']}\n[+] Last ProjectDiscovery scan output was:\n{str(discovery)}")
                     again = input(f"{colors['blue']}\n[>] Would you like to run scans again? (y/n): {colors['reset']}")
                     if 'y' in str(again).lower():
                         self.PDiscovery_scan()
@@ -147,7 +150,7 @@ class Menu:
             # Fuzzing module
             elif option == '6':
                 if fuzzer != '':
-                    print(f"{colors['red']}\n[+] Last FUZZING scan output was:\n{str(fuzzer)}{colors['reset']}")
+                    print(f"{colors['red']}\n[+] Last FUZZING scan output was:\n{str(fuzzer)}")
                     again = input(f"{colors['blue']}\n[>] Would you like to FUZZ again? (y/n): {colors['reset']}")
                     if 'y' in str(again).lower():
                         self.fuzzing_scan()
@@ -155,6 +158,18 @@ class Menu:
                         print(f"{colors['red']}\n[+] Exiting FUZZING Module...{colors['reset']}") 
                 else:
                     self.fuzzing_scan()
+            
+            # Exploit Searcher
+            elif option == '7':
+                if exploits != '' and exploits!=None:
+                    print(f"{colors['red']}\n[+] Last Exploit Searcher scan output was:\n{str(exploits)}")
+                    again = input(f"{colors['blue']}\n[>] Would you like to search for exploits again? (y/n): {colors['reset']}")
+                    if 'y' in str(again).lower():
+                        self.exploit_search()
+                    else:
+                        print(f"{colors['red']}\n[+] Exiting Exploit Searcher Module...{colors['reset']}") 
+                else:
+                    self.exploit_search()
 
         except:
             print("Invalid option")
@@ -178,6 +193,9 @@ class Menu:
     def fuzzing_scan(self):
         self.fuzzer = fuzzing.Init()
 
+    def exploit_search(self):
+        self.exploits = exp_searcher.Init()
+
 if __name__ == "__main__":
     penkraken_welcome = Welcome(f"""
 ==================================================================                      
@@ -200,6 +218,7 @@ ______   ____   ____ |    |/ _|___________  |  | __ ____   ____
     balancers = ''
     discovery = ''
     fuzzer = ''
+    exploits = ''
     # Choose an Option:
     while True:
         penkraken_menu = Menu()
@@ -218,8 +237,9 @@ ______   ____   ____ |    |/ _|___________  |  | __ ____   ____
                 discovery = penkraken_menu.discovery
             if penkraken_menu.fuzzer != '':
                 fuzzer = penkraken_menu.fuzzer
+            if penkraken_menu.exploits != '':
+                exploits = penkraken_menu.exploits
 
-        
         except:
             pass
 

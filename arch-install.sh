@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo '[+] Installing Required Packages...'
-sudo pacman -S wafw00f halberd go python-python-nmap nmap
+sudo pacman -S wafw00f halberd go python-python-nmap nmap exploitdb python-requests
 echo '[+] Installing Project Discovery tools...'
 go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
 go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest

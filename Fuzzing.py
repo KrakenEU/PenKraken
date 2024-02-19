@@ -9,7 +9,7 @@ class fuzzer:
         self.results = []
         while True:
             x = input(f"{penkraken.colors['green']}\n[1] Subdirectories discovery\n[2] Subdomains discovery\n[3] Post data Fuzzing\n\n{penkraken.colors['blue']}[>] Choose option: {penkraken.colors['reset']}")
-            if str(x) != '1' and str(x) != '2' and str(x) != '3' and str(x) != '4':
+            if str(x) != '1' and str(x) != '2' and str(x) != '3':
                 print(f"{penkraken.colors['red']}\n[-] Invalid Option{penkraken.colors['reset']}")
             else:
                 break
