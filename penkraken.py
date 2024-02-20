@@ -15,6 +15,7 @@ import load_balancers as load_balancers
 import discovery_tools as discoverytools
 import Fuzzing as fuzzing
 import exploit_searcher as exp_searcher
+import shell_craft as Shellcraft
 
 colors = {
   'reset': '\x1b[0m',
@@ -82,10 +83,11 @@ class Menu:
         self.discovery = ''
         self.fuzzer = ''
         self.exploits = ''
+        self.shells = ''
 
         try:
             print(f"{colors['blue']}\n[+] What would you like to use:{colors['reset']}")
-            option = input(f"{colors['bright_green']}\n[1] OS Identification\n[2] Port Scanning\n[3] WAF Detectionn\n[4] Load Balancers Scan\n[5] Project Discovery Tools\n[6] Fuzzing Module\n[7] Exploit Searcher\n\n{colors['blue']}[>] Choose an option: {colors['reset']}")
+            option = input(f"{colors['bright_green']}\n[1] OS Identification\n[2] Port Scanning\n[3] WAF Detectionn\n[4] Load Balancers Scan\n[5] Project Discovery Tools\n[6] Fuzzing Module\n[7] Exploit Searcher\n[8] Shell Crafter\n\n{colors['blue']}[>] Choose an option: {colors['reset']}")
 
             # Os Identification
             if option == '1':
@@ -171,6 +173,18 @@ class Menu:
                 else:
                     self.exploit_search()
 
+            # Shell Crafter
+            elif option == '8':
+                if shells != '':
+                    print(f"{colors['red']}\n[+] Last Shell Crafted was:\n{str(shells)}")
+                    again = input(f"{colors['blue']}\n[>] Would you like to craft a shell again? (y/n): {colors['reset']}")
+                    if 'y' in str(again).lower():
+                        self.shell_crafter()
+                    else:
+                        print(f"{colors['red']}\n[+] Exiting ShellCrafter Module...{colors['reset']}") 
+                else:
+                    self.shell_crafter()
+
         except:
             print("Invalid option")
 
@@ -195,6 +209,9 @@ class Menu:
 
     def exploit_search(self):
         self.exploits = exp_searcher.Init()
+    
+    def shell_crafter(self):
+        self.shells = Shellcraft.Init()
 
 if __name__ == "__main__":
     penkraken_welcome = Welcome(f"""
@@ -219,6 +236,7 @@ ______   ____   ____ |    |/ _|___________  |  | __ ____   ____
     discovery = ''
     fuzzer = ''
     exploits = ''
+    shells = ''
     # Choose an Option:
     while True:
         penkraken_menu = Menu()
@@ -239,6 +257,8 @@ ______   ____   ____ |    |/ _|___________  |  | __ ____   ____
                 fuzzer = penkraken_menu.fuzzer
             if penkraken_menu.exploits != '':
                 exploits = penkraken_menu.exploits
+            if penkraken_menu.shells != '':
+                shells = penkraken_menu.shells
 
         except:
             pass
@@ -255,8 +275,6 @@ ______   ____   ____ |    |/ _|___________  |  | __ ____   ____
             else:
                 print(f"{colors['red']}\n[-] That's not an option, try again{colors['reset']}")
 
-
-
-    
+  
 
  
