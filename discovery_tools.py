@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 
-import subprocess
+import sys
+sys.path.append('../')
 import penkraken
+import penkraken
+import subprocess
+
 
 class httpx:
     def __init__(self):

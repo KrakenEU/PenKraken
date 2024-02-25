@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import wafw00f
 import subprocess
+import sys
+sys.path.append('../')
 import penkraken
 
 class wafw00f:

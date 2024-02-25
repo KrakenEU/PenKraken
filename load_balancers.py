@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 import wafw00f
 import subprocess
+import sys
+import sys
+sys.path.append('../')
 import penkraken
-import time
 
 class Halberd:
 

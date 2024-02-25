@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import sys
+sys.path.append('../')
 import penkraken
 import subprocess
 
@@ -187,19 +189,7 @@ class fuzzer:
 def Init():
     try:
         print(f"{penkraken.colors['blue']}\n[+] Welcome to the {penkraken.colors['red']}Fuzzing{penkraken.colors['blue']} module!\n{penkraken.colors['reset']}")
-        valid = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:/.-_'
-        check = 0
-        while check == 0:
-            target = input(f"{penkraken.colors['blue']}\n[>] Select your target to be scanned (ex: https://example.com): {penkraken.colors['reset']}")
-            for x in target:
-                if str(x) in valid:
-                    check = 1
-                    continue
-                else:
-                    print(f"{penkraken.colors['red']}\n[-] Invalid Target{penkraken.colors['reset']}")
-                    check = 0
-                    break
-
+        target = input(f"{penkraken.colors['blue']}\n[>] Select your target to be scanned (ex: https://example.com): {penkraken.colors['reset']}")
         target = fuzzer(target)
         out = ''
         for x in target.results:

@@ -5,6 +5,8 @@ import sys
 import subprocess
 import ipaddress
 import nmap
+import sys
+sys.path.append('../')
 import penkraken
 
 # First Option

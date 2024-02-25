@@ -2,6 +2,8 @@
 import subprocess
 import ipaddress
 import nmap
+import sys
+sys.path.append('../')
 import penkraken
 
 class openPorts:

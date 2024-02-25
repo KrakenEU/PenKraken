@@ -8,14 +8,16 @@ import signal
 import wafw00f
 
 # Import modules
-import os_identification as os_identify
-import port_scanning as port_scanning
-import waf_detection as waf_detection
-import load_balancers as load_balancers
-import discovery_tools as discoverytools
-import Fuzzing as fuzzing
-import exploit_searcher as exp_searcher
-import shell_craft as Shellcraft
+import modules.os_identification as os_identify
+import modules.port_scanning as port_scanning
+import modules.waf_detection as waf_detection
+import modules.load_balancers as load_balancers
+import modules.discovery_tools as discoverytools
+import modules.Fuzzing as fuzzing
+import modules.exploit_searcher as exp_searcher
+import modules.shell_craft as Shellcraft
+import modules.OSINT_tools as Osint
+import modules.pass_crack as Cracker
 
 colors = {
   'reset': '\x1b[0m',
@@ -84,10 +86,12 @@ class Menu:
         self.fuzzer = ''
         self.exploits = ''
         self.shells = ''
+        self.osint = ''
+        self.cracked = ''
 
         try:
             print(f"{colors['blue']}\n[+] What would you like to use:{colors['reset']}")
-            option = input(f"{colors['bright_green']}\n[1] OS Identification\n[2] Port Scanning\n[3] WAF Detectionn\n[4] Load Balancers Scan\n[5] Project Discovery Tools\n[6] Fuzzing Module\n[7] Exploit Searcher\n[8] Shell Crafter\n\n{colors['blue']}[>] Choose an option: {colors['reset']}")
+            option = input(f"{colors['bright_green']}\n[1] OS Identification\n[2] Port Scanning\n[3] WAF Detectionn\n[4] Load Balancers Scan\n[5] Project Discovery Tools\n[6] Fuzzing Module\n[7] Exploit Searcher\n[8] Shell Crafter\n[9] OSINT CLI Auto Tool\n[10] Password Cracking\n\n{colors['blue']}[>] Choose an option: {colors['reset']}")
 
             # Os Identification
             if option == '1':
@@ -184,6 +188,30 @@ class Menu:
                         print(f"{colors['red']}\n[+] Exiting ShellCrafter Module...{colors['reset']}") 
                 else:
                     self.shell_crafter()
+            
+            # Osint CLI
+            elif option == '9':
+                if osint != '':
+                    print(f"{colors['red']}\n[+] Last OSINT Scan was:\n{str(osint)}")
+                    again = input(f"{colors['blue']}\n[>] Would you like to use the OSINT tool again? (y/n): {colors['reset']}")
+                    if 'y' in str(again).lower():
+                        self.osint_scan()
+                    else:
+                        print(f"{colors['red']}\n[+] Exiting OSINT Module...{colors['reset']}") 
+                else:
+                    self.osint_scan()
+            
+            # Password Cracking
+            elif option == '10':
+                if cracked != '':
+                    print(f"{colors['red']}\n[+] Last Password Cracking was:\n{str(cracked)}")
+                    again = input(f"{colors['blue']}\n[>] Would you like to use the Password Cracking tool again? (y/n): {colors['reset']}")
+                    if 'y' in str(again).lower():
+                        self.cracking()
+                    else:
+                        print(f"{colors['red']}\n[+] Exiting Password Cracking Module...{colors['reset']}") 
+                else:
+                    self.cracking()
 
         except:
             print("Invalid option")
@@ -212,6 +240,12 @@ class Menu:
     
     def shell_crafter(self):
         self.shells = Shellcraft.Init()
+    
+    def osint_scan(self):
+        self.osint = Osint.Init()
+
+    def cracking(self):
+        self.cracked = Cracker.Init()
 
 if __name__ == "__main__":
     penkraken_welcome = Welcome(f"""
@@ -237,6 +271,8 @@ ______   ____   ____ |    |/ _|___________  |  | __ ____   ____
     fuzzer = ''
     exploits = ''
     shells = ''
+    osint = ''
+    cracked = ''
     # Choose an Option:
     while True:
         penkraken_menu = Menu()
@@ -259,6 +295,10 @@ ______   ____   ____ |    |/ _|___________  |  | __ ____   ____
                 exploits = penkraken_menu.exploits
             if penkraken_menu.shells != '':
                 shells = penkraken_menu.shells
+            if penkraken_menu.osint != '':
+                osint = penkraken_menu.osint
+            if penkraken_menu.cracked != '':
+                cracked = penkraken_menu.cracked
 
         except:
             pass
