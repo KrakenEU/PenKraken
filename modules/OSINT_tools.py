@@ -168,7 +168,7 @@ class Osint:
     
     def cloudfail(self):
         try:
-            output = subprocess.Popen(f'cloudfail -t {self.name}',stdout=subprocess.PIPE ,stderr=subprocess.STDOUT, text=True, shell=True)
+            output = subprocess.Popen(f'sudo cloudfail -t {self.name}',stdout=subprocess.PIPE ,stderr=subprocess.STDOUT, text=True, shell=True)
             info = f"{penkraken.colors['green']}[+] CloudFail Results:{penkraken.colors['reset']}"
             print(info)
             self.results.append(info)
