@@ -496,18 +496,9 @@ ______   ____   ____ |    |/ _|___________  |  | __ ____   ____
 
 
         except:
-            pass
+            print(f"{colors['red']}\n[-] Failed to update Variables.{colors['reset']}") 
 
-        # Export Results to a recoverable file
-        #try:
-        # Write New Data
-        
-        #except:
-        #    print('Could Not write')
                     
-
-        print(Results_dic)
-
         # Perform more actions
 
         while True:
@@ -516,19 +507,22 @@ ______   ____   ____ |    |/ _|___________  |  | __ ____   ____
                 break
             elif 'n' in str(cont).lower():
                 input_name = input(f"{colors['blue']}\n[>] Name of the Resulting report file (Default = PenKraken-Report.txt): {colors['reset']}")
-                if input_name != '':
-                    name = input_name
-                else:
-                    name = 'PenKraken-Report.txt'
-                file = open(name, 'w')
-                write = ''
-                for k,v in Results_dic.items():
-                    if k.split()[-1] not in write:
-                        write+=f"{colors['red']}"+k+f"\n{colors['reset']}"
-                    for s,i in v.items():
-                        write+=f"{colors['green']}"+s+f": {colors['magenta']}"+i+f"\n{colors['reset']}"
+                try:
+                    if input_name != '':
+                        name = input_name
+                    else:
+                        name = 'PenKraken-Report.txt'
+                    file = open(name, 'w')
+                    write = ''
+                    for k,v in Results_dic.items():
+                        if k.split()[-1] not in write:
+                            write+=f"{colors['red']}"+k+f"\n{colors['reset']}"
+                        for s,i in v.items():
+                            write+=f"{colors['green']}"+s+f": {colors['magenta']}"+i+f"\n{colors['reset']}"
 
-                file.write(write)
+                    file.write(write)
+                except:
+                    print(f"{colors['red']}\n[-] Could not export Report!{colors['reset']}")
 
                 print(f"{colors['red']}\n[+] Exiting Now...\n[+] Thanks for Using PenKraken!!{colors['reset']}")
                 exit()
