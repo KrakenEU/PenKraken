@@ -339,7 +339,7 @@ def RecoverFile(name):
             
             fuzzing_match = fuzzing_pattern.search(entry)
             if fuzzing_match:
-                entry_dict['Fuzzing'] = fuzzing_match.group(1).strip()
+                entry_dict['Fuzzing'] = fuzzing_match.group(1).strip() +'\n'
             
             balancers_match = balancers_pattern.search(entry)
             if balancers_match:
