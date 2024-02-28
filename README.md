@@ -6,7 +6,7 @@
 
 ```
 git clone https://github.com/KrakenEU/PenKraken
-cd Penkraken
+cd PenKraken
 chmod +x debian-install.sh
 ./debian-install.sh
 ```
@@ -15,7 +15,7 @@ chmod +x debian-install.sh
 
 ```
 git clone https://github.com/KrakenEU/PenKraken
-cd Penkraken
+cd PenKraken
 chmod +x arch-install.sh
 ./arch-install.sh
 ```
