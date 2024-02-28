@@ -123,20 +123,18 @@ class cracker:
             proc = subprocess.Popen(com, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, shell=True)
             possibles = []
             cont=True
+            process = []
             while cont:
                 output = proc.stdout.readline()
                 if output == '' and proc.poll() is not None:
                     break
                 else:
-                    if self.hash_val+':' in output:
-                        self.results.append(f"{penkraken.colors['green']}{output}{penkraken.colors['reset']}")
                     if 'No hashes loaded.' in output:
                         print(f"{penkraken.colors['red']}[+] Mode {mode} not valid!{penkraken.colors['reset']}")
                         break
                     if 'Cracked' in output:
                         print(f"{penkraken.colors['green']}[+] Cracked! {penkraken.colors['reset']}")
-                        self.results.append(f"{penkraken.colors['green']}[+] Cracked!{penkraken.colors['reset']}")
-                        self.results.append(f"{penkraken.colors['green']}{output}{penkraken.colors['reset']}")
+                        self.results.append(f"{penkraken.colors['green']}{process[-4]}{penkraken.colors['reset']}")
                         cont = False
                         self.cracked = True
                         break
@@ -144,17 +142,17 @@ class cracker:
                         com = f"hashcat -m {mode} {self.hash_file} {self.cracking_wordlist} --show"
                         proc = subprocess.check_output(com, shell=True)
                         print(f"{penkraken.colors['green']}[+] This Was already Cracked: {str(proc.decode())} {penkraken.colors['reset']}")
-                        self.results.append(f"{penkraken.colors['green']}[+] This Was already Cracked: {str(proc.decode())}{penkraken.colors['reset']}")
+                        self.results.append(f"{penkraken.colors['green']}[+] This Was already Cracked: {str(proc.decode())} {penkraken.colors['reset']}")
                         cont = False
                         self.cracked = True
                         break
                     elif output:
                         print(f"{penkraken.colors['magenta']}{output.strip()}{penkraken.colors['reset']}")
+                        process.append(output)
             if not cont:
                 break
         
                 
-
 def Init():
     try:
         print(f"{penkraken.colors['blue']}\n[+] Welcome to the {penkraken.colors['red']}Password Cracking{penkraken.colors['blue']} module!\n{penkraken.colors['reset']}")

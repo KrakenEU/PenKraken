@@ -9,8 +9,8 @@ import penkraken
 class openPorts:
 
     def __init__(self):
-        ip = input(f"{penkraken.colors['blue']}\n[>] Target IP: {penkraken.colors['reset']}")
-        ip_address = ipaddress.ip_address(ip)
+        self.ip = input(f"{penkraken.colors['blue']}\n[>] Target IP: {penkraken.colors['reset']}")
+        ip_address = ipaddress.ip_address(self.ip)
         self.ports_discovered = ''
         self.openPorts(ip_address)
         
@@ -44,10 +44,12 @@ class openPorts:
 class nmapPorts:
 
     def __init__(self):
-        ip = input(f"{penkraken.colors['blue']}\n[>] Target IP: {penkraken.colors['reset']}")
-        ip_address = ipaddress.ip_address(ip)
+        self.ip = input(f"{penkraken.colors['blue']}\n[>] Target IP: {penkraken.colors['reset']}")
+        ip_address = ipaddress.ip_address(self.ip)
         self.ports_discovered = ''
+        self.nmap_scan = ''
         self.portScan(ip_address)
+        
     
     def portScan(self,ip_address):
         self.count = 0
@@ -125,8 +127,8 @@ class nmapPorts:
                                  results+="\n      -> " + str(a) + " : " + str(b)
                         else:
                             results+="\n   -> " + str(x) + " : " + str(y)
-            
             print(f"{penkraken.colors['green']}{results}{penkraken.colors['reset']}")
+            self.nmap_scan = results
             print(f"{penkraken.colors['green']}\n[+] Scan Completed!{penkraken.colors['reset']}")
             print(f"{penkraken.colors['magenta']}[+] Discovered Ports: {penkraken.colors['red']}{str(self.count)}{penkraken.colors['reset']}")
             print(f"{penkraken.colors['magenta']}[+] Ports: {penkraken.colors['red']}{self.ports_discovered}{penkraken.colors['reset']}")
@@ -161,7 +163,10 @@ def Init():
             target = nmapPorts()
 
         # Return ports
-        return ''.join("\n[+] " + str(x) for x in target.ports_discovered.split())
+        try:
+            return [target.ip, ''.join('\n[+]'+str(x) for x in target.ports_discovered.split('\n')), target.nmap_scan]
+        except:
+            return [target.ip, ''.join('\n[+]'+str(x) for x in target.ports_discovered.split('\n'))]
 
     except ValueError:
         print(f"{penkraken.colors['red']}[-] Invalid address: %s{penkraken.colors['reset']}" % sys.argv[1])

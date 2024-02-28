@@ -5,7 +5,8 @@ sys.path.append('../')
 import penkraken
 import penkraken
 import subprocess
-
+import socket
+import re
 
 class httpx:
     def __init__(self):
@@ -134,6 +135,7 @@ class subfinder:
 class nuclei:
     def __init__(self):
         self.results = []
+        self.ip = ''
         while True:
             x = input(f"{penkraken.colors['green']}\n[1] Custom Template Scan\n[2] Default Scan (Single Target - Time Consuming)\n\n{penkraken.colors['blue']}[>] Choose option: {penkraken.colors['reset']}")
             if str(x) != '1' and str(x) != '2':
@@ -181,6 +183,7 @@ class nuclei:
                             print(f"{penkraken.colors['red']}\n[-] Invalid Target{penkraken.colors['reset']}")
                             check = 0
                             break
+                self.obtain_ip(targ)
                 # take templates folder
                 check2 = 0
                 while check2 == 0:
@@ -261,6 +264,7 @@ class nuclei:
                         print(f"{penkraken.colors['red']}\n[-] Invalid Target{penkraken.colors['reset']}")
                         check = 0
                         break
+            self.obtain_ip(t)
             command = f"nuclei -u {t}"
             process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,text=True, shell=True)
             while True:
@@ -274,11 +278,20 @@ class nuclei:
 
         except:
             print(f"{penkraken.colors['red']} Error encountered in Nuclei Scan {penkraken.colors['reset']}")
+    
+    def obtain_ip(self,domain):
+        try:
+            self.ip = socket.gethostbyname(domain)
+            return self.ip
+        except socket.error as e:
+            print(f"Couldn't obatin IP from {domain}. Error: {e}")
+            return None
 
 class autoscan:
     def __init__(self):
         self.results = []
         self.auto_scan()
+        self.ip = ''
         try:
             # write Output to a file
             write = input(f"{penkraken.colors['green']}\n[>] Would you like to write the output to a file? (y/n): {penkraken.colors['reset']}")
@@ -290,7 +303,15 @@ class autoscan:
                 print(f"{penkraken.colors['green']}\n[+] Output was correctly saved to {penkraken.colors['magenta']}'Autoscan-results.txt'\n{penkraken.colors['reset']}")
         except:
             print(f"\n{penkraken.colors['red']}[-] Error while saving output to file{penkraken.colors['reset']}")
-            
+    
+    def obtain_ip(self,domain):
+        try:
+            self.ip = socket.gethostbyname(domain)
+            return self.ip
+        except socket.error as e:
+            print(f"Couldn't obatin IP from {domain}. Error: {e}")
+            return None    
+    
     def auto_scan(self):
         try:
             valid = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:/.-_#?'
@@ -307,12 +328,20 @@ class autoscan:
                         break
 
             # run command
+            self.obtain_ip(t)
             print(f"{penkraken.colors['blue']}\n[+] Triggering auto scan against {penkraken.colors['magenta']}{t}{penkraken.colors['reset']}")
-            output = subprocess.check_output(f"subfinder -d {t} -o {t}-urls.txt | httpx -status-code -title -tech-detect", shell=True)
+            com = f"subfinder -d {t} -o {t}-urls.txt | httpx -status-code -title -tech-detect"
+            proc = subprocess.Popen(com, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, shell=True)
+            while True:
+                output = proc.stdout.readline()
+                if output == '' and proc.poll() is not None:
+                    break
+                else:
+                    if output:
+                        print(output.strip())
+                        self.results.append(output.strip())
             print(f"{penkraken.colors['blue']}\n[+] Results were saved into {penkraken.colors['magenta']}{t}-urls.txt{penkraken.colors['blue']}{penkraken.colors['reset']}")
-            for x in str(output.decode()).split('\n'):
-                print(f"{penkraken.colors['magenta']} {x} {penkraken.colors['reset']}")
-                self.results.append(x)
+             
             print(f"{penkraken.colors['blue']}\n[+] Running nuclei http scan on {penkraken.colors['magenta']}{t}-urls.txt{penkraken.colors['blue']} (This could take A LOT of time...){penkraken.colors['reset']}")
             # print and save results
             command = f"nuclei -list {t}-urls.txt"
@@ -352,7 +381,11 @@ def Init():
             out = ''
             for x in target.results:
                 out += x + '\n'
-            return out
+            
+            try:
+                return [target.ip, out]
+            except:
+                return out
 
         except:
             print(f"{penkraken.colors['red']}\n[-] Could not save results {penkraken.colors['red']}{target.os_name}{penkraken.colors['reset']}")

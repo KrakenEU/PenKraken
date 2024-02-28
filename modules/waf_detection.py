@@ -4,13 +4,27 @@ import subprocess
 import sys
 sys.path.append('../')
 import penkraken
+import socket
+
 
 class wafw00f:
     
     def __init__(self, target):
         self.target = target
         self.waf_detected = []
+        self.ip = ''
         self.scan()
+        self.obtain_ip(target)
+    
+    def obtain_ip(self,domain):
+        try:
+            domain = domain.replace('https://','').replace('http://','').split('/')[0]
+            self.ip = socket.gethostbyname(domain)
+            return self.ip
+        except socket.error as e:
+            print(f"Couldn't obatin IP from {domain}. Error: {e}")
+            return None 
+
     
     def scan(self):
         op = ''
@@ -35,6 +49,7 @@ class wafw00f:
         
         except:
             print(f"{penkraken.colors['red']}\n[-] Error encountered while searching for wafs{penkraken.colors['reset']}")
+        
 
 def Init():
     try:
@@ -51,12 +66,13 @@ def Init():
                     print(f"{penkraken.colors['red']}\n[-] Invalid Target{penkraken.colors['reset']}")
                     check = 0
                     break
-    
+
         target = wafw00f(target)
         out = ''
         for x in target.waf_detected:
-            out += x + '\n'
-        return out
+            out += x.strip() + '\n'
+        return [target.ip, out]
 
     except:
             print(f"{penkraken.colors['red']}\n[-] Exiting WAFs Scan{penkraken.colors['reset']}")
+

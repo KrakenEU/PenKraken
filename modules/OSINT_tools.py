@@ -10,6 +10,7 @@ import sys
 sys.path.append('../')
 import penkraken
 import subprocess
+import re
 
 class Osint:
 
@@ -17,6 +18,7 @@ class Osint:
         self.name = name
         self.doc_extensions = [".doc",".docx",".xls",".xlsx",".ppt",".pptx",".odt",".ods",".odp",".rtf",".csv",".pdf"]
         self.web_extensions = [".com",".org",".net",".gov",".edu",".int",".mil",".arpa",".biz",".info",".mobi",".name",".pro",".aero",".coop",".museum",".asia",".jobs",".tel",".travel",]
+        self.flag = ''
 
         file=False
         for x in self.doc_extensions:
@@ -32,6 +34,7 @@ class Osint:
         if '@' in name:
             try:
                 print(f"\n{penkraken.colors['green']}[+] Mail Detected!{penkraken.colors['reset']}")
+                self.flag = 'Mails'
                 self.Holehe()
                 self.infoga()
                 self.h8mail()
@@ -41,6 +44,7 @@ class Osint:
         elif site:
             try:
                 print(f"\n{penkraken.colors['green']}[+] Domain Detected!{penkraken.colors['reset']}")
+                self.flag = 'Domains'
                 self.TheHarvester()
                 self.cloudfail()
                 self.whois()
@@ -50,6 +54,7 @@ class Osint:
         elif file:
             try:
                 print(f"\n{penkraken.colors['green']}[+] File Detected!{penkraken.colors['reset']}")
+                self.flag = 'Metadata'
                 self.exiftool()
             except:
                 print(f"\n{penkraken.colors['red']}[-] Metadata extractor Failed{penkraken.colors['reset']}")     
@@ -57,6 +62,7 @@ class Osint:
         else:
             try:
                 print(f"\n{penkraken.colors['green']}[+] Username Detected!{penkraken.colors['reset']}")
+                self.flag = 'Usernames'
                 self.sherlock()
                 self.maigret()
             except:
@@ -65,7 +71,7 @@ class Osint:
     def sherlock(self):
         try:
             output = subprocess.Popen(f'sudo sherlock {self.name}',stdout=subprocess.PIPE ,stderr=subprocess.STDOUT, text=True, shell=True)
-            info = f"{penkraken.colors['green']}\n[+] Sherlock Scan results:{penkraken.colors['reset']}"
+            info = f"{penkraken.colors['green']}[+] Sherlock Scan results:{penkraken.colors['reset']}"
             print(info)
             self.results.append(info)
             while True:
@@ -81,7 +87,7 @@ class Osint:
     def Holehe(self):
         try:
             output = subprocess.Popen(f'holehe {self.name}',stdout=subprocess.PIPE ,stderr=subprocess.STDOUT, text=True, shell=True)
-            info = f"{penkraken.colors['green']}\n[+] Holehe Scan results:\n[+] The mail {penkraken.colors['magenta']}{self.name}{penkraken.colors['green']} has been used in:{penkraken.colors['reset']}"
+            info = f"{penkraken.colors['green']}[+] Holehe Scan results:\n[+] The mail {penkraken.colors['magenta']}{self.name}{penkraken.colors['green']} has been used in:{penkraken.colors['reset']}"
             print(info)
             self.results.append(info)
             while True:
@@ -97,7 +103,7 @@ class Osint:
     def infoga(self):
         try:
             output = subprocess.Popen(f'infoga --info {self.name} --breach -v 3',stdout=subprocess.PIPE ,stderr=subprocess.STDOUT, text=True, shell=True)
-            info = f"{penkraken.colors['green']}\n[+] Infoga Scan results:\n[+] The mail {penkraken.colors['magenta']}{self.name}{penkraken.colors['green']} has been used in:{penkraken.colors['reset']}"
+            info = f"{penkraken.colors['green']}[+] Infoga Scan results:\n[+] The mail {penkraken.colors['magenta']}{self.name}{penkraken.colors['green']} has been used in:{penkraken.colors['reset']}"
             print(info)
             self.results.append(info)
             while True:
@@ -113,7 +119,7 @@ class Osint:
     def h8mail(self):
         try:
             output = subprocess.Popen(f'h8mail -t {self.name}',stdout=subprocess.PIPE ,stderr=subprocess.STDOUT, text=True, shell=True)
-            info = f"{penkraken.colors['green']}\n[+] H8Mail Scan results:{penkraken.colors['reset']}"
+            info = f"{penkraken.colors['green']}[+] H8Mail Scan results:{penkraken.colors['reset']}"
             print(info)
             self.results.append(info)
             while True:
@@ -129,7 +135,7 @@ class Osint:
     def TheHarvester(self):
         try:
             output = subprocess.Popen(f'theharvester -d {self.name} -l 1000 -b bing,duckduckgo',stdout=subprocess.PIPE ,stderr=subprocess.STDOUT, text=True, shell=True)
-            info = f"{penkraken.colors['green']}\n[+] TheHarvester Scan results:{penkraken.colors['reset']}"
+            info = f"{penkraken.colors['green']}[+] TheHarvester Scan results:{penkraken.colors['reset']}"
             print(info)
             self.results.append(info)
             while True:
@@ -145,7 +151,7 @@ class Osint:
     def whois(self):
         try:
             output = subprocess.Popen(f'whois {self.name}',stdout=subprocess.PIPE ,stderr=subprocess.STDOUT, text=True, shell=True)
-            info = f"{penkraken.colors['green']}\n[+] Whois Scan results:{penkraken.colors['reset']}"
+            info = f"{penkraken.colors['green']}[+] Whois Scan results:{penkraken.colors['reset']}"
             print(info)
             self.results.append(info)
             while True:
@@ -195,7 +201,7 @@ class Osint:
     def maigret(self):
         try:
             output = subprocess.Popen(f'maigret {self.name}',stdout=subprocess.PIPE ,stderr=subprocess.STDOUT, text=True, shell=True)
-            info = f"{penkraken.colors['green']}\n[+] Maigret Scan results:\n[+] The nickname {penkraken.colors['magenta']}{self.name}{penkraken.colors['green']} has been used in:{penkraken.colors['reset']}"
+            info = f"{penkraken.colors['green']}[+] Maigret Scan results:\n[+] The nickname {penkraken.colors['magenta']}{self.name}{penkraken.colors['green']} has been used in:{penkraken.colors['reset']}"
             print(info)
             self.results.append(info)
             while True:
@@ -220,7 +226,7 @@ def Init():
         out = ''
         for x in target.results:
             out += x + '\n'
-        return out
+        return [target.flag, out, opt]
 
     except:
         print(f"{penkraken.colors['red']}\n[-] Exiting OSINT Module{penkraken.colors['reset']}")

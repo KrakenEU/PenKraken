@@ -4,11 +4,16 @@ import sys
 sys.path.append('../')
 import penkraken
 import subprocess
+import socket
+import re
 
 class fuzzer:
     def __init__(self,target):
         self.target = target
         self.results = []
+        self.ip = ''
+        self.flag = ''
+        self.obtain_ip(target)
         while True:
             x = input(f"{penkraken.colors['green']}\n[1] Subdirectories discovery\n[2] Subdomains discovery\n[3] Post data Fuzzing\n\n{penkraken.colors['blue']}[>] Choose option: {penkraken.colors['reset']}")
             if str(x) != '1' and str(x) != '2' and str(x) != '3':
@@ -41,8 +46,17 @@ class fuzzer:
         except:
             print(f"\n{penkraken.colors['red']}[-] Error while saving output to file{penkraken.colors['reset']}")
 
+    def obtain_ip(self,domain):
+        try:
+            domain = domain.replace('https://','').replace('http://','').split('/')[0]
+            self.ip = socket.gethostbyname(domain)
+            return self.ip
+        except socket.error as e:
+            print(f"Couldn't obatin IP from {domain}. Error: {e}")
+            return None    
 
     def subdirectories_fuzz(self):
+        self.flag = 'subdirectories'
         wordlist = input(f"{penkraken.colors['blue']}[+] Select wordlist location (ex: /usr/share/wordlist/mywordlist.txt): {penkraken.colors['reset']}")
         print(f"{penkraken.colors['blue']}\n[+] Starting subdirectory scan...\n[+] Wordlist = {penkraken.colors['magenta']}{wordlist}{penkraken.colors['blue']}\n[+] Target = {penkraken.colors['magenta']}{self.target}\n{penkraken.colors['blue']}{penkraken.colors['reset']}")
         extensions =  input(f"{penkraken.colors['blue']}[+] Do you want to add any extensions to the fuzz? (ex: .php,.txt,.html) (Leave blank otherwise): {penkraken.colors['reset']}")
@@ -69,6 +83,7 @@ class fuzzer:
                     self.results.append(salida.strip())
 
     def subdomains_fuzz(self):
+        self.flag = 'subdomains'
         wordlist = input(f"{penkraken.colors['blue']}[+] Select wordlist location (ex: /usr/share/wordlist/mywordlist.txt): {penkraken.colors['reset']}")
         print(f"{penkraken.colors['blue']}\n[+] Starting subdomain scan...\n[+] Wordlist = {penkraken.colors['magenta']}{wordlist}{penkraken.colors['blue']}\n[+] Target = {penkraken.colors['magenta']}{self.target}\n{penkraken.colors['blue']}{penkraken.colors['reset']}")
         filter_words = input(f"{penkraken.colors['blue']}[+] Do you want to apply a filter to avoid showing certain word (ex: 9128,532) (Leave blank otherwise): {penkraken.colors['reset']}")
@@ -87,7 +102,7 @@ class fuzzer:
                     self.results.append(salida.strip())
 
     def post_fuzzing(self):
-
+        self.flag = 'POSTs'
         login=input(f"{penkraken.colors['green']}\n[1] Fuzz username and password\n[2] Fuzz just one parameter\n\n{penkraken.colors['blue']}[>] Select an option (1-2): {penkraken.colors['reset']}")
 
         if login == '1':
@@ -194,7 +209,7 @@ def Init():
         out = ''
         for x in target.results:
             out += x + '\n'
-        return out
+        return [target.ip, out, target.flag]
 
     except:
         print(f"{penkraken.colors['red']}\n[-] Exiting Fuzzing Module{penkraken.colors['reset']}")

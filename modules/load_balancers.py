@@ -5,6 +5,7 @@ import sys
 import sys
 sys.path.append('../')
 import penkraken
+import socket
 
 class Halberd:
 
@@ -12,7 +13,20 @@ class Halberd:
         self.target = target
         self.filename = filename
         self.load_balancer_info = []
+        self.ip = ''
+        if target != '':
+            self.obtain_ip(target)
         self.scan()
+        
+        
+    def obtain_ip(self,domain):
+        try:
+            domain = domain.replace('https://','').replace('http://','').split('/')[0]
+            self.ip = socket.gethostbyname(domain)
+            return self.ip
+        except socket.error as e:
+            print(f"Couldn't obatin IP from {domain}. Error: {e}")
+            return None 
 
     def scan(self):
         try:
@@ -95,8 +109,9 @@ def Init():
         out = ''
         for x in target.load_balancer_info:
             out += x + '\n'
-        return out
+
+        return [target.ip, out]
 
     except:
-            print(f"{penkraken.colors['red']}\n[-] Exiting Halberd Scan{penkraken.colors['reset']}")
+        print(f"{penkraken.colors['red']}\n[-] Exiting Halberd Scan{penkraken.colors['reset']}")
 

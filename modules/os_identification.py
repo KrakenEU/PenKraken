@@ -86,7 +86,7 @@ def Init():
 
         # Display OS:
         print(f"{penkraken.colors['magenta']}\n[+] OS = {penkraken.colors['red']}{target.os_name}{penkraken.colors['reset']}")
-        return target.os_name
+        return [ip, target.os_name]
 
     except ValueError:
         print(f"{penkraken.colors['red']}[-] Invalid address: %s{penkraken.colors['reset']}")
