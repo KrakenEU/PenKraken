@@ -26,7 +26,7 @@ class openPorts:
                     print(f"{penkraken.colors['red']}\n[-] Invalid port range{penkraken.colors['reset']}")
         
             for port in range(1,int(prange)):
-                proc = subprocess.Popen(["/bin/echo '' > /dev/tcp/"+str(ip_address)+"/"+str(port)+" 2>&/dev/null"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+                proc = subprocess.Popen(["bash -c \"/bin/echo '' > /dev/tcp/"+str(ip_address)+"/"+str(port)+" 2>&/dev/null\""], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
                 (out, err) = proc.communicate()
                 if b'ambiguous redirect' in out:
                     print(f"{penkraken.colors['magenta']}[+] Open Port:{penkraken.colors['red']} {str(port)} !!{penkraken.colors['reset']}")
