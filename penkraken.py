@@ -424,13 +424,22 @@ ______   ____   ____ |    |/ _|___________  |  | __ ____   ____
             if penkraken_enum.ports != '': 
                 ports_discovered = penkraken_enum.ports[1]
                 if f'Host: {penkraken_enum.ports[0]}' in Results_dic:
-                    Results_dic[f'Host: {penkraken_enum.ports[0]}'].update({'Oppened Ports' : penkraken_enum.ports[1]+'\n'})
-                    Results_dic[f'Host: {penkraken_enum.ports[0]}'].update({'Nmap Scan' : penkraken_enum.ports[2]+'\n'})
+                    try:
+                        Results_dic[f'Host: {penkraken_enum.ports[0]}'].update({'Oppened Ports' : penkraken_enum.ports[1]+'\n'})
+                        Results_dic[f'Host: {penkraken_enum.ports[0]}'].update({'Nmap Scan' : penkraken_enum.ports[2]+'\n'})
+                    except:
+                        Results_dic[f'Host: {penkraken_enum.ports[0]}'].update({'Oppened Ports' : penkraken_enum.ports[1]+'\n'})
 
                 else:
-                    Results_dic[f'Host: {penkraken_enum.ports[0]}'] = {}
-                    Results_dic[f'Host: {penkraken_enum.ports[0]}']['Oppened Ports'] = penkraken_enum.ports[1]+'\n'
-                    Results_dic[f'Host: {penkraken_enum.ports[0]}']['Nmap Scan'] = penkraken_enum.ports[2]+'\n'
+                    try:
+                        Results_dic[f'Host: {penkraken_enum.ports[0]}'] = {}
+                        Results_dic[f'Host: {penkraken_enum.ports[0]}']['Oppened Ports'] = penkraken_enum.ports[1]+'\n'
+                        Results_dic[f'Host: {penkraken_enum.ports[0]}']['Nmap Scan'] = penkraken_enum.ports[2]+'\n'
+                    except:
+                        Results_dic[f'Host: {penkraken_enum.ports[0]}'] = {}
+                        Results_dic[f'Host: {penkraken_enum.ports[0]}']['Oppened Ports'] = penkraken_enum.ports[1]+'\n'
+                        
+                    
 
 
             if penkraken_enum.wafs != '':
