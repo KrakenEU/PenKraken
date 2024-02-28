@@ -2,7 +2,7 @@
 
 ## Installation
 
-### Debian:
+### Kali Linux:
 
 ```
 git clone https://github.com/KrakenEU/PenKraken
